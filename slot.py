@@ -14,8 +14,6 @@ class Slot:
         self.double = False
 
     def performClick(self):
-        press_key(SPELL_KEY)
-        release_key(SPELL_KEY)
         pyautogui.mouseDown(self.x, self.y)
         pyautogui.mouseUp(self.x, self.y)
         pyautogui.mouseDown(self.x, self.y)
@@ -26,9 +24,10 @@ class Slot:
 
 
     def setBlop(self, imgs):
+        start = time.time()
         self.performClick()
 
-        screenshot_bgr = updateScreenshot()
+        screenshot_bgr, _ = updateScreenshot()
 
         tmpMax = 0
 
@@ -40,4 +39,4 @@ class Slot:
                 self.blop = blop
                 tmpMax = max_val
 
-        print("Found: ", self.blop.name)
+        print("Found: ", self.blop.name, "in", time.time() - start)
