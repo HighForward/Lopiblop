@@ -27,7 +27,7 @@ class Slot:
         start = time.time()
         self.performClick()
 
-        screenshot_bgr, _ = updateScreenshot()
+        screenshot_bgr, _ = updateScreenshot(True)
 
         tmpMax = 0
 
@@ -39,4 +39,4 @@ class Slot:
                 self.blop = blop
                 tmpMax = max_val
 
-        print("Found: ", self.blop.name, "in", time.time() - start)
+        # print("Found: ", self.blop.name, "in", time.time() - start)

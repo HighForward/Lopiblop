@@ -3,12 +3,21 @@ import cv2
 import numpy as np
 import pyautogui
 
-def updateScreenshot():
-    screenshot = pyautogui.screenshot()
+#640 - 900
+#725 - 1000
+
+def updateScreenshot(onlyBlop = False):
+
+    screenshot = None
+    if onlyBlop is False:
+        screenshot = pyautogui.screenshot(region=(0, 0, 1600, 1000))
+    else:
+        screenshot = pyautogui.screenshot(region=(440, 800, 350, 200))
     screenshot_np = np.array(screenshot)
     screenshot_bgr = cv2.cvtColor(screenshot_np, cv2.COLOR_RGB2BGR)
     screenshot_gray = cv2.cvtColor(screenshot_bgr, cv2.COLOR_BGR2GRAY)
     return screenshot_bgr, screenshot_gray
+
 
 def LoadBlopImages():
     images = []

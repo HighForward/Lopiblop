@@ -1,24 +1,20 @@
 import pygetwindow as gw
 import pyautogui
-import numpy as np
-import cv2
-import os
 import time
 import keyboard
 import sys
-
+import cv2
 
 from grid import initGrid
 from template import Template, updateScreenshot, LoadBlopImages
 from pnj import startLopiblop
-from slot import Slot
 from utils import getDoubleIndex
 from keyEvents import press_key, release_key, SPELL_KEY
 
-windows = gw.getWindowsWithTitle('Qxqx')  # Replace 'Window Title' with the actual window title
+windows = gw.getWindowsWithTitle('Qxqx')  # Replace with your pseudo Dofus
 
-grid = []
-initGrid(grid)
+# while True:
+#     print(pyautogui.position())
 
 def WaitUntilSpellReady(nospell):
     press_key(SPELL_KEY)
@@ -29,30 +25,33 @@ def WaitUntilSpellReady(nospell):
         screenshot_bgr, screenshot_gray = updateScreenshot()
         val = nospell.matchTemplateGray(screenshot_gray)
         if val is True:
-            print('Spell Ready')
             break
 
+nbLoop = 0
 
 if windows:
     window = windows[0]
     window.resizeTo(1600, 1000)
     window.moveTo(0, 0)
     window.activate()
-
-    time.sleep(1)
-
-    startLopiblop()
     imgs = LoadBlopImages()
-
     nospell = Template("pnj", "nospell.png")
-    while True:
 
+    while True:
+        grid = []
+        initGrid(grid)
+
+        time.sleep(1)
+
+        startLopiblop()
         currTurn = 0
 
         for i, _ in enumerate(grid):
 
             if keyboard.is_pressed('esc'):
-                print("Exit")
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+                print(f"Exiting. nb of fights: {nbLoop}, {nbLoop * 20} Trooloton earned, {nbLoop * 500}k spent")
                 sys.exit()
 
             pyautogui.moveTo(grid[i].x, grid[i].y)
@@ -69,7 +68,6 @@ if windows:
 
             iDouble = getDoubleIndex(grid, i)
             if iDouble > -1:
-                print("Double Found", i, iDouble)
 
                 WaitUntilSpellReady(nospell)
 
@@ -84,11 +82,13 @@ if windows:
                     grid[i].performClick()
                 currTurn = 0
 
-        if currTurn == 2:
-            currTurn = 0
+            if currTurn == 2:
+                currTurn = 0
 
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        time.sleep(5)
+        press_key(0x01)
+        release_key(0x01)
+        nbLoop = nbLoop + 1
 
 else:
     print("Window not found!")
